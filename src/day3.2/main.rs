@@ -16,6 +16,9 @@ fn solve(reader: &mut dyn BufRead) -> i64 {
 }
 
 fn max_joltage_of_bank(bank: &str) -> i64 {
+    // For performance, reuse this vector for generating variants
+    let mut temp_variant_digits = Vec::with_capacity(12);
+
     bank.chars()
         .flat_map(|c| c.to_digit(10))
         .map(|d| d as i64)
@@ -27,24 +30,26 @@ fn max_joltage_of_bank(bank: &str) -> i64 {
                 return (new_max, new_digits);
             }
 
+            let len = digits.len();
             let mut max_new = max;
             let mut digits_new = digits.clone();
 
-            for cut_index in 0..digits.len() {
-                let mut variant_digits = digits[..cut_index].to_vec();
-                variant_digits.extend_from_slice(&digits[cut_index..]);
+            for cut_index in 0..len {
+                temp_variant_digits.clear();
+                temp_variant_digits.extend_from_slice(&digits[..cut_index]);
+                temp_variant_digits.extend_from_slice(&digits[cut_index..]);
 
-                if digits.len() < 12 {
-                    variant_digits.push(digit);
+                if len < 12 {
+                    temp_variant_digits.push(digit);
                 } else {
-                    variant_digits.remove(cut_index);
-                    variant_digits.push(digit);
+                    temp_variant_digits.remove(cut_index);
+                    temp_variant_digits.push(digit);
                 }
 
-                let variant = variant_digits.iter().fold(0, |acc, &d| acc * 10 + d);
+                let variant = temp_variant_digits.iter().fold(0, |acc, &d| acc * 10 + d);
                 if variant > max_new {
                     max_new = variant;
-                    digits_new = variant_digits;
+                    digits_new = temp_variant_digits.clone();
                 }
             }
 
