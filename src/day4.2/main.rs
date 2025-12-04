@@ -1,10 +1,15 @@
 use std::io::BufRead;
+use std::time::Instant;
 
 fn main() {
     let mut handle = std::io::stdin().lock();
+
+    let now = Instant::now();
     let result = solve(&mut handle);
+    let elapsed = now.elapsed();
 
     println!("{}", result);
+    eprintln!("Elapsed: {:.2?}", elapsed);
 }
 
 struct Grid {
