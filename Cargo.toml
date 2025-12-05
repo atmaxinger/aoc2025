@@ -35,6 +35,13 @@ path = "src/day4.1/main.rs"
 name = "day4_2"
 path = "src/day4.2/main.rs"
 
+[[bin]]
+name = "day5_1"
+path = "src/day5.1/main.rs"
+
+[[bin]]
+name = "day5_2"
+path = "src/day5.2/main.rs"
+
 [dependencies]
 rstest = "0.26.1"
-rayon = "1.11.0"
